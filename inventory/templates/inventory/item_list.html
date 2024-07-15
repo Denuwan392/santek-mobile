@@ -1,0 +1,35 @@
+{% extends "inventory/base.html" %}
+
+{% block title %}Item List{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Item List</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">retail_minimum_price</th>
+            <th scope="col">retail_selling_price</th>
+            <th scope="col">wholesale_minimum_price</th>
+            <th scope="col">wholesale_selling_price</th>
+            <th scope="col">Category</th>
+            <th scope="col">Warranty</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ item.name }}</td>
+            <td>{{ item.retail_minimum_price }}</td>
+            <td>{{ item.retail_selling_price }}</td>
+            <td>{{ item.wholesale_minimum_price }}</td>
+            <td>{{ item.wholesale_selling_price }}</td>
+            <td>{{ item.category.name }}</td>
+            <td>{{ item.warranty }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

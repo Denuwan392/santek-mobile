@@ -1,0 +1,27 @@
+<!-- pos_system/templates/pos_system/sales_summary_report.html -->
+{% extends 'pos_system/base.html' %}
+
+{% block title %}Sales Summary Report{% endblock %}
+
+{% block content %}
+<h2>Sales Summary Report</h2>
+
+<table class="table">
+    <tr>
+        <th>Total Sales</th>
+        <td>Rs. {{ summary.total_sales }}</td>
+    </tr>
+    <tr>
+        <th>Total Transactions</th>
+        <td>{{ summary.total_transactions }}</td>
+    </tr>
+    <tr>
+        <th>Average Transaction Value</th>
+        <td>Rs. {{ summary.average_transaction }}</td>
+    </tr>
+</table>
+
+<!-- Add a button to print the report -->
+<button onclick="window.print()" class="btn btn-secondary">Print Report</button>
+
+{% endblock %}

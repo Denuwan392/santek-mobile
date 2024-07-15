@@ -1,0 +1,31 @@
+{% extends 'pos_system/base.html' %}
+
+{% block title %}Customers{% endblock %}
+
+{% block content %}
+<h2>Customers</h2>
+<a class="btn btn-primary mb-3" href="{% url 'pos_system:customer_create' %}">Add Customer</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for customer in customers %}
+        <tr>
+            <td>{{ customer.name }}</td>
+            <td>{{ customer.email }}</td>
+            <td>{{ customer.phone }}</td>
+            <td>
+                <a href="{% url 'pos_system:customer_update' customer.pk %}" class="btn btn-warning">Edit</a>
+                <a href="{% url 'pos_system:customer_delete' customer.pk %}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,66 @@
+<!-- templates/inventory/seller_profile.html -->
+{% extends 'inventory/base.html' %}
+
+{% block content %}
+<h1>Seller Profile: {{ seller.name }}</h1>
+
+<h2>Associated Phones</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Serial Number</th>
+            <th>Item</th>
+            <th>Condition</th>
+            <th>Price</th>
+            <th>Shipment</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for phone in phones %}
+        <tr>
+            <td>{{ phone.serial_number }}</td>
+            <td>{{ phone.item.name }}</td>
+            <td>{{ phone.condition }}</td>
+            <td>{{ phone.price }}</td>
+            <td>{{ phone.shipment }}</td>
+            <td>
+                <form method="POST" action="{% url 'remove_phone' phone.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Remove</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Associated Accessories</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Serial Number</th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <!--th>Shipment</th-->
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for association in accessory_associations %}
+        <tr>
+            <td>{{ association.accessory.serial_number }}</td>
+            <td>{{ association.accessory.item.name }}</td>
+            <td>{{ association.quantity }}</td>
+            <!--td>{{ association.shipment }}</td-->
+            <td>
+                <form method="POST" action="{% url 'remove_accessory_association' association.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Remove</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

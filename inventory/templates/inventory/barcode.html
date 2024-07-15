@@ -1,0 +1,26 @@
+<!-- barcode.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generated Barcodes</title>
+    <style>
+        /* Adjust styles for printing */
+        @media print {
+            img {
+                max-width: 100%;
+                height: auto;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>Generated Barcodes</h2>
+    {% for barcode_image in barcode_images %}
+        <img src="{{ barcode_image.url }}" alt="Barcode"><br><br>
+    {% endfor %}
+    <button onclick="window.print()">Print Barcodes</button>
+</body>
+</html>

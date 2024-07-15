@@ -1,0 +1,44 @@
+<!-- templates/inventory/barcode_preview.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcode Preview</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .barcode-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .barcode-item {
+            margin: 15px;
+            text-align: center;
+        }
+        .barcode-item img {
+            max-width: 200px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Barcode Preview</h1>
+        <div class="barcode-container">
+            {% for barcode_url in barcode_urls %}
+                <div class="barcode-item">
+                    <img src="{{ barcode_url }}" alt="Barcode">
+                    <p>{{ barcode_url|basename }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="#" onclick="window.print();" class="btn btn-primary">Print Barcodes</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!-- pos_system/templates/pos_system/customer_debt_report.html -->
+{% extends 'pos_system/base.html' %}
+
+{% block title %}Customer Debt Report{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Customer Debt Report</h2>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Total Debt</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+            <tr>
+                <td>{{ customer.name }}</td>
+                <td>{{ customer.email }}</td>
+                <td>{{ customer.phone }}</td>
+                <td>Rs. {{ customer.total_debt }}</td>
+                <td><a href="{% url 'pos_system:customer_detail' customer.id %}" class="btn btn-primary">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <button onclick="window.print()" class="btn btn-secondary">Print Report</button>
+</div>
+{% endblock %}

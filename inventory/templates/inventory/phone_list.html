@@ -1,0 +1,161 @@
+{% extends "inventory/base.html" %}
+
+{% block title %}Phone List{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Phone List</h1>
+
+<!-- Display messages -->
+{% if messages %}
+    <div class="alert alert-dismissible fade show mt-3">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<!-- Button to Open the Add Phone Modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addPhoneModal">
+    Add Phone
+</button>
+
+<!-- Date Filter Form -->
+<h4 class="my-4">Filter Phones by Phone Added Date</h4>
+<form method="get" action="{% url 'phone_list' %}" class="form-inline my-4">
+    <div class="form-group mx-sm-3 mb-2">
+        <label for="start_date" class="mr-2">Start Date</label>
+        <input type="date" class="form-control" id="start_date" name="start_date" placeholder="Start Date" value="{{ request.GET.start_date }}">
+    </div>
+    <div class="form-group mx-sm-3 mb-2">
+        <label for="end_date" class="mr-2">End Date</label>
+        <input type="date" class="form-control" id="end_date" name="end_date" placeholder="End Date" value="{{ request.GET.end_date }}">
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Filter</button>
+</form>
+
+<!-- Table displaying the phone list -->
+<form method="post" action="{% url 'assign_shipment_number' %}">
+    {% csrf_token %}
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Serial Number</th>
+                <th scope="col">Item</th>
+                <th scope="col">Condition</th>
+                <th scope="col">Shipment Number</th>
+                <th scope="col">Actions</th>
+                <th scope="col">
+                    <input type="checkbox" id="select-all-checkbox">
+                </th> <!-- Checkbox for selecting all -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for phone in phones %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ phone.serial_number }}</td>
+                <td>{{ phone.item.name }}</td>
+                <td>{{ phone.condition }}</td>
+                <td>{{ phone.price }}</td>
+                <td>{{ phone.shipment }}</td> <!-- Display shipment -->
+                <td>
+                    <a href="{% url 'edit_phone_condition' phone.pk %}" class="btn btn-warning btn-sm">Edit Condition</a>
+                    <a href="{% url 'generate_single_phone_barcode' phone.id %}" class="btn btn-sm btn-primary">Print Barcode</a>
+                </td>
+                <td>
+                    <input type="checkbox" name="phones" value="{{ phone.pk }}">
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Dropdown to select shipment -->
+    <div class="form-group">
+        <label for="shipment_id">Select Shipment</label>
+        <select class="form-control" id="shipment_id" name="shipment_id" required>
+            {% for shipment in shipments %}
+            <option value="{{ shipment.id }}">Shipment {{ shipment.id }} to {{ shipment.shop.name }} on {{ shipment.shipment_date }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Assign Shipment</button>
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="addPhoneModal" tabindex="-1" role="dialog" aria-labelledby="addPhoneModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addPhoneModalLabel">Add Phone</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Add Phone Form -->
+                <form id="addPhoneForm" method="post" action="{% url 'add_phone' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="item">Item</label>
+                        <select class="form-control" id="item" name="item" required>
+                            {% for item in items %}
+                            <option value="{{ item.id }}">{{ item.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="condition">Condition</label>
+                        <select class="form-control" id="condition" name="condition" required>
+                            <option value="Brand New">Brand New</option>
+                            <option value="Faulty">Faulty</option>
+                            <option value="Used">Used</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="serial_number">Serial Number</label>
+                        <input type="text" class="form-control" id="serial_number" name="serial_number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="shipment_id">Select Shipment</label>
+                        <select class="form-control" id="shipment_id" name="shipment_id">
+                            <option value="" selected>Select Shipment</option>
+                            {% for shipment in shipments %}
+                            <option value="{{ shipment.id }}">Shipment {{ shipment.id }} to {{ shipment.shop.name }} on {{ shipment.shipment_date }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Phone</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script to handle checkbox functionality -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get the select all checkbox
+        const selectAllCheckbox = document.getElementById('select-all-checkbox');
+
+        // Get all the phone checkboxes
+        const phoneCheckboxes = document.querySelectorAll('input[name="phones"]');
+
+        // Add event listener to the select all checkbox
+        selectAllCheckbox.addEventListener('change', function () {
+            // Loop through all phone checkboxes and set their checked property
+            phoneCheckboxes.forEach(function (checkbox) {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        });
+    });
+</script>
+
+{% endblock %}

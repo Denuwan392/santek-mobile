@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bill</title>
+</head>
+<body>
+    <h1>Transaction Details</h1>
+    <p>Transaction ID: {{ transaction.id }}</p>
+    <p>Customer: {{ transaction.customer }}</p>
+    <p>Date: {{ transaction.transaction_date }}</p>
+    <p>Total Amount: ${{ transaction.total_amount }}</p>
+
+    <h2>Items</h2>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+        </tr>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>${{ item.price * item.quantity }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{% extends 'inventory/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Sellers</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Profile</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for seller in sellers %}
+            <tr>
+                <td>{{ seller.id }}</td>
+                <td>{{ seller.name }}</td>
+                <td><a href="{% url 'seller_profile' seller.id %}">View Profile</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

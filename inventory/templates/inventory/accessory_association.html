@@ -1,0 +1,62 @@
+{% extends 'inventory/base.html' %}
+
+{% block content %}
+<h1>Accessory Association Page</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="seller">Select Seller:</label>
+        <select name="seller" id="seller" class="form-control">
+            <option value="">Select Seller</option>
+            {% for seller in sellers %}
+                <option value="{{ seller.id }}">{{ seller.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="item">Accessory Name:</label>
+        <select name="item" id="item" class="form-control">
+            <option value="">Accessory Name</option>
+            {% for accessory in accessories %}
+                <option value="{{ accessory.item.id }}">{{ accessory.item.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="quantity">Associate Quantity:</label>
+        <input type="number" name="quantity" id="quantity" class="form-control" placeholder="Enter Quantity">
+    </div>
+
+    <div class="form-group">
+        <label for="serial_number">Enter Item Serial:</label>
+        <input type="text" name="serial_number" id="serial_number" class="form-control" placeholder="Scan Item Serial">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Associate to Seller</button>
+</form>
+
+<h2>Item Details</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Serial Number</th>
+            <th>Item</th>
+            
+            <th>Quantity Remaining</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for accessory in accessories %}
+            <tr>
+                <td>{{ accessory.serial_number }}</td>
+                <td>{{ accessory.item.name }}</td>
+                <td>{{ accessory.quantity }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

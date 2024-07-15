@@ -1,0 +1,101 @@
+{% extends 'pos_system/base.html' %}
+
+{% block title %}Add Item to Transaction{% endblock %}
+
+{% block content %}
+<h2>Add Item to Transaction {{ transaction.id }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <div class="form-group">
+        <label for="item">Select Item</label>
+        <select class="form-control" id="item" name="item">
+            {% for item in items %}
+                <option value="{{ item.id }}">{{ item.name }} - Rs.{{ item.price }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="serial_number">Select Serial</label>
+        <select class="form-control" id="serial_number" name="serial_number">
+            <!-- Options will be populated by JavaScript -->
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="quantity">Quantity</label>
+        <input type="number" class="form-control" id="quantity" name="quantity" min="1" value="1" required>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Add Item</button>
+</form>
+
+<h3>Available Items</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Item Name</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>Rs. {{ item.price }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const itemSelect = document.getElementById('item');
+        const serialSelect = document.getElementById('serial_number');
+        
+        // Mapping from Django context (item_serial_map and accessory_serial_map)
+        const itemSerialMap = {{ item_serial_map|safe }};
+        const accessorySerialMap = {{ accessory_serial_map|safe }};
+
+        function updateSerialOptions() {
+            const selectedItemId = itemSelect.value;
+            const serialNumbers = itemSerialMap[selectedItemId] || [];
+            const accessorySerialNumbers = accessorySerialMap[selectedItemId] || [];
+            
+            // Clear existing options
+            serialSelect.innerHTML = '';
+            
+            // Populate serial numbers based on selected item type
+            if (serialNumbers.length > 0) {
+                serialNumbers.forEach(serial => {
+                    const option = document.createElement('option');
+                    option.value = serial;
+                    option.textContent = serial;
+                    serialSelect.appendChild(option);
+                });
+            } else if (accessorySerialNumbers.length > 0) {
+                accessorySerialNumbers.forEach(serial => {
+                    const option = document.createElement('option');
+                    option.value = serial;
+                    option.textContent = serial;
+                    serialSelect.appendChild(option);
+                });
+            } else {
+                // Handle case where no serial numbers are available
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'No serial numbers available';
+                serialSelect.appendChild(option);
+            }
+        }
+
+        // Event listeners for item selection change
+        itemSelect.addEventListener('change', updateSerialOptions);
+
+        // Initial call to populate serial numbers based on initial selected item
+        updateSerialOptions();
+    });
+</script>
+{% endblock %}

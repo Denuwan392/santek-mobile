@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt</title>
+    
+    <style>
+        body {
+            width: 80mm;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+        }
+        .receipt-container {
+            margin: 0;
+        }
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 0px;
+        }
+        .logo {
+            width: 150px;
+            height: auto;
+            margin-bottom: 0px;
+        }
+        .receipt-details {
+            margin-bottom: 5px;
+        }
+        .receipt-details p {
+            margin: 2px 0;
+        }
+        .item-list {
+            width: 80mm;
+            border-collapse: collapse;
+            margin-bottom: 5px;
+        }
+        .item-list th, .item-list td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 2px dashed #000000; /* Dotted border */
+        }
+        .item-list th {
+            background-color: #f2f2f2;
+        }
+        .summary-table {
+            width: 80mm;
+            border-collapse: collapse;
+        }
+        .summary-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 2px dashed #000000; /* Dotted border */
+        }
+        .thank-you {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .dashed-line {
+            border-top: 2px dashed #000000; /* Dashed line style */
+            margin: 10px 0; /* Adjust margin as needed */
+        }
+    </style>
+</head>
+<body onload="window.print()">
+    <div class="receipt-container">
+        <div class="receipt-header">
+            <img src="{% static 'images/Santek-Mobile Accessories.png' %}" alt="Logo" class="logo">
+            <div class="dashed-line"></div>
+            <h2>Receipt</h2>
+            <div class="dashed-line"></div>
+            
+        </div>
+        <div class="receipt-details">
+            <p><strong>Transaction ID:</strong> {{ transaction.id }}</p>
+            <p><strong>Invoice Number:</strong> {{ transaction.invoice_number }}</p>
+            <p><strong>Customer:</strong> {{ transaction.customer.name }}</p>
+            <p><strong>Date:</strong> {{ transaction.transaction_date }}</p>
+            <p><strong>Seller:</strong> {{ transaction.seller }}</p>
+        </div>
+        <div class="item-list">
+            <table style="width: 80mm;">
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Price (Rs.)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td style="width: 60mm;">{{ item.item.name }}<br>{{ item.serial_number }}<br>{{ item.quantity }} X {{ item.price }}</td>
+                        <td style="padding-top: 40px; text-align: right;">{{ item.total_price }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <table class="summary-table">
+                <tr>
+                    <td style="width: 40mm; border-bottom: 2px dashed #000000;"><h3 style="margin-top: 0; margin-bottom: 0;">Total Amount</h3><br>Total Discount<br>Total Paid<br>Balance Amount:</td>
+                    <td style="border-bottom: 2px dashed #000000; text-align: right;"><h3 style="margin-top: 0; margin-bottom: 0;">Rs. {{ total_amount }}</h3><br>Rs. {{ total_discount }}<br>Rs. {{ transaction.amount_paid }}<br>Rs. {{ balance }}</td>
+                </tr>
+            </table>
+        </div>
+        
+        <!-- Thank you message -->
+        <div class="thank-you">
+            <p>Thank you for your purchase!</p>
+        </div>
+    </div>
+    
+</body>
+</html>

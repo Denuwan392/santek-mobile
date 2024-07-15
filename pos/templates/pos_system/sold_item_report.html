@@ -1,0 +1,31 @@
+<!-- pos_system/templates/pos_system/sold_item_report.html -->
+{% extends 'pos_system/base.html' %}
+
+{% block title %}Sold Item-Wise Report{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Sold Item-Wise Report</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Total Sold</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in sold_items %}
+                <tr>
+                    <td>{{ item.item__name }}</td>
+                    <td>{{ item.total_sold }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <button onclick="window.print()" class="btn btn-secondary">Print Report</button>
+</div>
+{% endblock %}

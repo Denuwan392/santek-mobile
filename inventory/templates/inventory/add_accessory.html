@@ -1,0 +1,109 @@
+{% extends "inventory/base.html" %}
+
+{% block title %}Accessory List{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Accessory List</h1>
+
+    <!-- Display messages -->
+    {% if messages %}
+    <div class="alert alert-dismissible fade show mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Button to Open the Add Accessory Modal -->
+    <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addAccessoryModal">
+        Add Accessory
+    </button>
+
+    <!-- Date Filter Form -->
+    <h4>Filter Accessories by Added Date</h4>
+    <form method="get" action="{% url 'accessory_list' %}" class="form-inline mb-3">
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="start_date" class="mr-2">Start Date</label>
+            <input type="date" class="form-control" id="start_date" name="start_date" placeholder="Start Date"
+                value="{{ request.GET.start_date }}">
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="end_date" class="mr-2">End Date</label>
+            <input type="date" class="form-control" id="end_date" name="end_date" placeholder="End Date"
+                value="{{ request.GET.end_date }}">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Filter</button>
+    </form>
+
+    <!-- Table displaying the accessory list -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Serial Number</th>
+                <th scope="col">Item</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th> <!-- Added Price column -->
+                <!--th scope="col">Shipment Number</th-->
+                <th scope="col">Actions</th> <!-- New column for actions -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for accessory in accessories %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ accessory.item.serial_number }}</td>
+                <td>{{ accessory.item.name }}</td>
+                <td>{{ accessory.quantity }}</td>
+                <td>{{ accessory.item.price }}</td> <!-- Display item price -->
+                <!--td>{{ accessory.shipment }}</td-->
+                <td>
+                    <a href="{% url 'generate_single_barcode' accessory.id %}" class="btn btn-sm btn-primary">Print Barcode</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addAccessoryModal" tabindex="-1" role="dialog" aria-labelledby="addAccessoryModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addAccessoryModalLabel">Add Accessory</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Add Accessory Form -->
+                    <form id="addAccessoryForm" method="post" action="{% url 'add_accessory' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="item">Item</label>
+                            <select class="form-control" id="item" name="item" required>
+                                {% for item in items %}
+                                <option value="{{ item.id }}">{{ item.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <!-- Serial number and price are handled automatically from the Item model -->
+                        <div class="form-group">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Accessory</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

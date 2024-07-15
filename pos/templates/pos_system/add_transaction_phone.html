@@ -1,0 +1,47 @@
+{% extends 'pos_system/base.html' %}
+
+{% block title %}Add Phone to Transaction{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Add Phone to Transaction {{ transaction.id }}</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="item">Select Phone</label>
+            <select class="form-control" id="phone" name="phone">
+                {% for phone in phones %}
+                    <option value="{{ phone.id }}">{{ phone.item.name }} - {{ phone.serial_number }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input type="number" class="form-control" id="quantity" name="quantity" min="1" value="1" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Add Phone</button>
+    </form>
+
+    <h3>Available Phones</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Phone Name</th>
+                <th>Serial Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for phone in phones %}
+            <tr>
+                <td>{{ phone.item.name }}</td>
+                <td>{{ phone.serial_number }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

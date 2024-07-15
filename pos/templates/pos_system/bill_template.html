@@ -1,0 +1,36 @@
+{% extends 'pos_system/base.html' %}
+
+{% block title %}Transaction Detail{% endblock %}
+
+{% block content %}
+<h2>Transaction Details</h2>
+<p>Transaction ID: {{ transaction.id }}</p>
+<p>Invoice Number: {{ transaction.invoice_number }}</p>
+<p>Customer: {{ transaction.customer.name }}</p>
+<p>Date: {{ transaction.transaction_date }}</p>
+<p>Seller: {{ transaction.seller }}</p>
+<p>Total Amount: <b>Rs. {{ total_amount }}</b></p>
+
+<h3>Items</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.item.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.price }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+{% endblock %}

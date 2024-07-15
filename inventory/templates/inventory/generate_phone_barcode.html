@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Barcodes</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optionally, include custom CSS for additional styling -->
+    <style>
+        /* Your custom CSS styles */
+        .barcode-item {
+            text-align: center; /* Center align barcode */
+            margin-bottom: 25px; /* Add margin between barcode items */
+        }
+        .barcode-item p {
+            margin: 0px; /* Add space above barcode */
+            font-weight: bold; /* Make item name bold */
+            font-size: 80px;
+            
+        }
+        
+             /* Rotate barcode 90 degrees */
+        
+    </style>
+</head>
+<body style="margin-right: 0; transform: rotate(90deg);">
+    <div class="container">
+        <!-- Display generated barcodes here -->
+        <div id="barcodeContainer" class="mt-5">
+            <div class="barcode-item">
+                <p style="margin-top: 150px;">{{ phone.item.name }}</p> <!-- Display item name above barcode -->
+                <svg id="barcode{{ phone.serial_number }}" class="barcode-rotated"></svg> <!-- Barcode container -->
+                <p>{{ phone.serial_number }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and JsBarcode library -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode/dist/JsBarcode.all.min.js"></script>
+
+    <script>
+        // Generate barcodes dynamically using JsBarcode
+        document.addEventListener('DOMContentLoaded', function() {
+            JsBarcode("#barcode{{ phone.serial_number }}", "{{ phone.serial_number }}", {
+                format: "CODE128",  // Specify barcode format (e.g., CODE128)
+                displayValue: false,  // Whether to display the encoded value below the barcode
+                width: 12,  // Barcode width
+                height: 500  // Barcode height
+            });
+
+            // Automatically trigger print dialog after barcodes are generated
+            window.print();
+        });
+    </script>
+</body>
+</html>

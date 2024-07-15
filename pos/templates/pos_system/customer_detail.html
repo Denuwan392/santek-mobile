@@ -1,0 +1,51 @@
+<!-- pos_system/templates/pos_system/customer_detail.html -->
+{% extends 'pos_system/base.html' %}
+
+{% block title %}Customer Detail{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="mb-0">Customer Detail</h2>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Name:</strong>
+                </div>
+                <div class="col-md-6">
+                    {{ customer.name }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Email:</strong>
+                </div>
+                <div class="col-md-6">
+                    {{ customer.email }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Phone:</strong>
+                </div>
+                <div class="col-md-6">
+                    {{ customer.phone }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Total Debt:</strong>
+                </div>
+                <div class="col-md-6">
+                    Rs. {{ total_debt }}
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-right">
+            <a href="{% url 'pos_system:customer_list' %}" class="btn btn-secondary">Back to Customer List</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

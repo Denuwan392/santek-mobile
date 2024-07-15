@@ -1,0 +1,14 @@
+{% extends "inventory/base.html" %}
+
+{% block title %}Edit Phone Condition{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Edit Condition for Phone: {{ phone.serial_number }}</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="{% url 'phone_list' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

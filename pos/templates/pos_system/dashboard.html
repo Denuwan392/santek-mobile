@@ -1,0 +1,16 @@
+<!-- pos_system/templates/pos_system/dashboard.html -->
+{% extends 'pos_system/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Welcome to the POS System</h1>
+    <p class="lead">Use the navigation bar to manage transactions, view reports, and more.</p>
+    <hr class="my-4">
+    <p>You can start a new transaction or view existing reports.</p>
+    <a class="btn btn-primary btn-lg" href="{% url 'pos_system:wholesale_pos' %}" role="button">Wholesale POS</a>
+    <a class="btn btn-primary btn-lg" href="{% url 'pos_system:retail_pos' %}" role="button">Retail POS</a>
+    <a class="btn btn-secondary btn-lg" href="{% url 'pos_system:transaction_report' %}" role="button">Reports</a>
+</div>
+{% endblock %}

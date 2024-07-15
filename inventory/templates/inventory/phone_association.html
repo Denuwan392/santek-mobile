@@ -1,0 +1,52 @@
+{% extends "inventory/base.html" %}
+
+{% block title %}Associate Sellers with Serial Numbers{% endblock %}
+
+{% block content %}
+    <h1>Associate Sellers</h1>
+
+    <!-- Search form -->
+    <form method="get" class="form-inline mb-3">
+        <input type="text" name="q" class="form-control mr-2" placeholder="Search by serial number" value="{{ request.GET.q }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <form method="post">
+        {% csrf_token %}
+        <!-- Display table of phone information -->
+        <table class="table table-striped mt-4">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Serial Number</th>
+                    <th>Item</th>
+                    <th>Condition</th>
+                    <th>Price</th>
+                    <th>Seller</th>  <!-- Add a column to select seller -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for phone in phones %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ phone.serial_number }}</td>
+                    <td>{{ phone.item.name }}</td>
+                    <td>{{ phone.condition }}</td>
+                    <td>{{ phone.price }}</td>
+                    <td>
+                        <!-- Add a dropdown or input to select/associate a seller -->
+                        <select class="form-control" name="seller_{{ phone.id }}">
+                            <option value="">Select Seller</option>
+                            <!-- Loop through sellers -->
+                            {% for seller in sellers %}
+                            <option value="{{ seller.id }}" {% if phone.salesman and phone.salesman.id == seller.id %}selected{% endif %}>{{ seller.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{% endblock %}

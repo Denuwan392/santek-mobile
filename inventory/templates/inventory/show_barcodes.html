@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Barcodes</title>
+    <!-- Include Bootstrap or any other CSS framework you are using -->
+    <!-- Optionally, include custom CSS for styling -->
+    <style>
+        /* Your custom CSS styles */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generated Barcodes</h1>
+        <div class="row">
+            {% for barcode_path in barcode_paths %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ barcode_path }}" class="card-img-top" alt="Barcode Image">
+                    <div class="card-body">
+                        <p class="card-text">Barcode: {{ barcode_path }}</p>
+                        <!-- Add a print button for each barcode image -->
+                        <button class="btn btn-primary btn-print" onclick="printBarcode('{{ barcode_path }}')">Print</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Include jQuery or other necessary scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Function to print a barcode image
+        function printBarcode(barcodePath) {
+            var printWindow = window.open('', '_blank');
+            printWindow.document.open();
+            printWindow.document.write('<html><head><title>Print Barcode</title></head><body><img src="' + barcodePath + '"></body></html>');
+            printWindow.document.close();
+            printWindow.print();
+            printWindow.close();
+        }
+    </script>
+</body>
+</html>

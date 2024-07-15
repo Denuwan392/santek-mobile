@@ -1,0 +1,19 @@
+{% extends 'inventory/base.html' %}
+
+{% block title %}Select Shipment{% endblock %}
+
+{% block content %}
+<h2>Select Shipment</h2>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="shipment_id">Select Shipment:</label>
+        <select id="shipment_id" name="shipment_id" class="form-control">
+            {% for shipment in shipments %}
+                <option value="{{ shipment.id }}">{{ shipment }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Generate Barcodes</button>
+</form>
+{% endblock %}

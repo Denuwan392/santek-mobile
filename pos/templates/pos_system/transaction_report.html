@@ -1,0 +1,68 @@
+{% extends 'pos_system/base.html' %}
+
+{% block title %}Transaction Report{% endblock %}
+
+{% block content %}
+<h2>Transaction Report</h2>
+
+<!-- Date Range form -->
+<h4 class="my-4">Filter by Date Range</h4>
+<form method="post" class="form-inline mb-4">
+    {% csrf_token %}
+    <div class="form-group mx-sm-3 mb-2">
+        {{ form.start_date.label_tag }} {{ form.start_date }}
+    </div>
+    <div class="form-group mx-sm-3 mb-2">
+        {{ form.end_date.label_tag }} {{ form.end_date }}
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Filter</button>
+</form>
+
+<!-- Search form -->
+<form method="get" class="form-inline mb-3">
+    <input type="text" name="q" class="form-control mr-2" placeholder="Search by invoice number" value="{{ query }}">
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Transaction ID</th>
+            <th>Invoice Number</th>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Total Amount</th>
+            <th>Amount Paid</th>
+            <th>Balance</th>
+            <th>Details</th>
+            <th>Actions</th> <!-- Add Actions column -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.id }}</td>
+            <td>{{ transaction.invoice_number }}</td>
+            <td>{{ transaction.customer.name }}</td>
+            <td>{{ transaction.transaction_date }}</td>
+            <td>Rs. {{ transaction.total_amount }}</td>
+            <td>Rs. {{ transaction.amount_paid }}</td>
+            <td>Rs. {{ transaction.balance }}</td>
+            <td><a href="{% url 'pos_system:transaction_detail' transaction.id %}" class="btn btn-primary">View</a></td>
+            <td>
+                <!-- Add a form for deleting the transaction -->
+                <form method="post" action="{% url 'pos_system:transaction_report' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="transaction_id" value="{{ transaction.id }}">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this transaction?');">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Add a button to print the report -->
+<button onclick="window.print()" class="btn btn-secondary">Print Report</button>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'pos_system/base.html' %}
+
+{% block title %}Create New Transaction{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h2 class="card-title">Create a New Transaction</h2>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <h3>Transaction Details</h3>
+                        <div class="form-group">
+                            {{ transaction_form.as_p }}
+                        </div>
+
+                        <h3>Customer Details</h3>
+                        <div class="form-group">
+                            {{ customer_form.as_p }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Create Transaction</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

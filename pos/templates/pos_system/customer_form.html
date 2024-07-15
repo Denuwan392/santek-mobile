@@ -1,0 +1,12 @@
+{% extends 'pos_system/base.html' %}
+
+{% block title %}Add/Edit Customer{% endblock %}
+
+{% block content %}
+<h2>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Customer</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">{% if form.instance.pk %}Update{% else %}Add{% endif %}</button>
+</form>
+{% endblock %}

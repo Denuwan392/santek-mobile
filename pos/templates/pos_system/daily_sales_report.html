@@ -1,0 +1,54 @@
+<!-- pos_system/templates/pos_system/daily_sales_report.html -->
+{% extends 'pos_system/base.html' %}
+
+{% block title %}Daily Sales Report{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Daily Sales Report</h2>
+
+    <form method="post" class="form-inline mb-3">
+        {% csrf_token %}
+        <div class="form-group mr-2">
+            {{ form.start_date.label_tag }}
+            {{ form.start_date }}
+        </div>
+        <div class="mr-2"></div>
+        <div class="form-group mr-2">
+            {{ form.end_date.label_tag }}
+            {{ form.end_date }}
+        </div>
+        <div class="mr-2"></div> <!-- Add a blank div with margin -->
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+    
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Invoice Number</th>
+                    <th>Customer</th>
+                    <th>Date</th>
+                    <th>Total Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in sales %}
+                <tr>
+                    <td>{{ transaction.id }}</td>
+                    <td>{{ transaction.invoice_number }}</td>
+                    <td>{{ transaction.customer.name }}</td>
+                    <td>{{ transaction.transaction_date }}</td>
+                    <td>Rs. {{ transaction.total_amount }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Total Sales: Rs. {{ total_sales }}</h3>
+
+    <button onclick="window.print()" class="btn btn-secondary">Print Report</button>
+</div>
+{% endblock %}
