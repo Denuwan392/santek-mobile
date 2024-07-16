@@ -11,7 +11,7 @@
             <th scope="col">Name</th>
             <th scope="col">cost</th>
             <th scope="col">retail_selling_price</th>
-            <th scope="col">wholesale_minimum_price</th>
+            <th scope="col">retail_minimum_price</th>
             <th scope="col">wholesale_selling_price</th>
             <th scope="col">Category</th>
             <th scope="col">Warranty</th>
@@ -24,9 +24,9 @@
             <td>{{ item.name }}</td>
             <td>{{ item.cost }}</td>
             <td>{{ item.retail_selling_price }}</td>
-            <td>{{ item.wholesale_minimum_price }}</td>
+            <td>{{ item.retail_minimum_price }}</td>
             <td>{{ item.wholesale_selling_price }}</td>
-            <td>{{ item.category.name }}</td>
+            <td>{{ item.category }}</td>
             <td>{{ item.warranty }}</td>
         </tr>
         {% endfor %}
