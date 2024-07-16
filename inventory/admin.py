@@ -14,7 +14,7 @@ class SellerAdmin(SimpleHistoryAdmin):
     list_display = ('name', 'contact_info', 'is_main_shop')
 
 class ItemAdmin(SimpleHistoryAdmin):
-    list_display = ('name', 'category', 'retail_minimum_price', 'retail_selling_price', 'wholesale_minimum_price', 'wholesale_selling_price', 'warranty', 'serial_number')
+    list_display = ('name', 'category', 'cost', 'retail_selling_price', 'wholesale_minimum_price', 'wholesale_selling_price', 'warranty', 'serial_number')
 
 class PhoneAdmin(SimpleHistoryAdmin):
     list_display = ('serial_number', 'item', 'condition', 'salesman', 'shipment')
