@@ -46,11 +46,18 @@ class Item(models.Model):
     ], default='Mobile Phones')
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
-    retail_minimum_price = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
+    cost = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
     retail_selling_price = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
     wholesale_minimum_price = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
     wholesale_selling_price = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
-    warranty = models.CharField(max_length=100, blank=True, null=True)
+    warranty = models.CharField(max_length=100,choices=[
+        ('No Warranty', 'No Warranty'),
+        ('1 Week', '1 Week'),
+        ('2 Week', '2 Week'),
+        ('1 Month', '1 Month'),
+        ('2 Month', '2 Month'),
+        ('6 Month', '6 Month'),
+    ], default='No Warranty')
     serial_number = models.CharField(max_length=100, blank=True, null=True)
     history = HistoricalRecords()
 
