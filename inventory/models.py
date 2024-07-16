@@ -43,7 +43,7 @@ class Item(models.Model):
     category = models.CharField(max_length=20, choices=[
         ('Mobile Phones', 'Mobile Phones'),
         ('Accessories', 'Accessories'),
-    ], default='Mobile Phones')
+    ], default='Accessories')
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     cost = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True, blank=True)
@@ -57,7 +57,7 @@ class Item(models.Model):
         ('1 Month', '1 Month'),
         ('2 Month', '2 Month'),
         ('6 Month', '6 Month'),
-    ], default='2 Week')
+    ], default='No Warranty')
     serial_number = models.CharField(max_length=100, blank=True, null=True)
     history = HistoricalRecords()
 
