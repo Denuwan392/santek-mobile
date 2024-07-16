@@ -42,7 +42,7 @@ def add_phone(request):
             condition=condition,
             cost=item.cost,
             retail_selling_price=item.retail_selling_price,
-            wholesale_minimum_price=item.wholesale_minimum_price,
+            retail_minimum_price=item.retail_minimum_price,
             wholesale_selling_price=item.wholesale_selling_price,
         )
         phone.save()
@@ -197,7 +197,7 @@ def add_accessory(request):
         serial_number = item.serial_number
         cost=item.cost,
         retail_selling_price=item.retail_selling_price,
-        wholesale_minimum_price=item.wholesale_minimum_price,
+        retail_minimum_price=item.retail_minimum_price,
         wholesale_selling_price=item.wholesale_selling_price,
 
         # Create or update the Accessory
