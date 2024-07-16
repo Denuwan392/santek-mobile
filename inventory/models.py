@@ -57,7 +57,7 @@ class Item(models.Model):
         ('1 Month', '1 Month'),
         ('2 Month', '2 Month'),
         ('6 Month', '6 Month'),
-    ], default='No Warranty')
+    ], default='2 Week')
     serial_number = models.CharField(max_length=100, blank=True, null=True)
     history = HistoricalRecords()
 
