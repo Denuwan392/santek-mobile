@@ -40,7 +40,7 @@ def add_phone(request):
             serial_number=serial_number,
             item=item,
             condition=condition,
-            retail_minimum_price=item.retail_minimum_price,
+            cost=item.cost,
             retail_selling_price=item.retail_selling_price,
             wholesale_minimum_price=item.wholesale_minimum_price,
             wholesale_selling_price=item.wholesale_selling_price,
@@ -195,7 +195,7 @@ def add_accessory(request):
         # Fetch the item and its price
         item = get_object_or_404(Item, id=item_id, category='Accessories')
         serial_number = item.serial_number
-        retail_minimum_price=item.retail_minimum_price,
+        cost=item.cost,
         retail_selling_price=item.retail_selling_price,
         wholesale_minimum_price=item.wholesale_minimum_price,
         wholesale_selling_price=item.wholesale_selling_price,
