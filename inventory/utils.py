@@ -5,7 +5,7 @@ import django
 from django.conf import settings
 
 # Set up Django environment
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'your_project.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'santek_mobile.settings')
 django.setup()
 
 from inventory.models import Item  # Replace 'your_app' with your actual Django app name
