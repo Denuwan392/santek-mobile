@@ -48,7 +48,7 @@ class Item(models.Model):
     description = models.TextField(blank=True, null=True)
     cost = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
     retail_selling_price = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
-    wholesale_minimum_price = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
+    retail_minimum_price = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
     wholesale_selling_price = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
     warranty = models.CharField(max_length=100,choices=[
         ('No Warranty', 'No Warranty'),
@@ -85,7 +85,7 @@ class Phone(models.Model):
     condition = models.CharField(max_length=100)
     cost = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
     retail_selling_price = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
-    wholesale_minimum_price = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
+    retail_minimum_price = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
     wholesale_selling_price = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
     salesman = models.ForeignKey(Seller, on_delete=models.SET_NULL, null=True, blank=True)
     shipment = models.ForeignKey(Shipment, on_delete=models.SET_NULL, null=True, blank=True)
@@ -125,7 +125,7 @@ class Accessory(models.Model):
     quantity = models.IntegerField(default=0)
     cost = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
     retail_selling_price = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
-    wholesale_minimum_price = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
+    retail_minimum_price = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
     wholesale_selling_price = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True)
     added_date = models.DateField(default=timezone.now)
     seller = models.ForeignKey(Seller, on_delete=models.SET_NULL, null=True, blank=True)
