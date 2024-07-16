@@ -1,0 +1,33 @@
+	iPhone 13 Promax 256GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 13 Promax 128GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 13 Pro 256GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 14 Pro 256GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 14 Pro 128GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 14 256GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 14 128GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 13 Pro 128GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 13 256GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 13 128GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 12 Promax 256GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 12 Promax 128GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 12 Pro 256GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 12 Pro 128GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 11 Pro Max 256GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 12 256GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 12 128GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 11 Pro 256GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 11 256GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone SE2 256GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 11 128GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone XR 256GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone XR 64GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone SE2 128GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone XR 128GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone SE2 64GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone XS 256GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone X 256GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 8 128GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 8 Plus 256GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 7 Plus 256GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 7 128GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
+	iPhone 7 Plus 128GB	Mobile Phones	0.00	0.00	0.00	0.00	2 Week	-
