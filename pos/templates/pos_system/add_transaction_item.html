@@ -12,7 +12,7 @@
         <label for="item">Select Item</label>
         <select class="form-control" id="item" name="item">
             {% for item in items %}
-                <option value="{{ item.id }}">{{ item.name }} - Rs.{{ item.price }}</option>
+                <option value="{{ item.id }}">{{ item.name }} - Rs.{{ item.retail_selling_price }}</option>
             {% endfor %}
         </select>
     </div>
@@ -44,7 +44,7 @@
         {% for item in items %}
         <tr>
             <td>{{ item.name }}</td>
-            <td>Rs. {{ item.price }}</td>
+            <td>Rs. {{ item.retail_selling_price }}</td>
         </tr>
         {% endfor %}
     </tbody>
