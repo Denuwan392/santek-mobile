@@ -28,7 +28,7 @@ def stock_list(request):
     query = request.GET.get('q', '')  # Use empty string as default
 
     if query:
-        stocks = stocks.filter(Q(name__icontains=query))
+        items = items.filter(Q(name__icontains=query))
     return render(request, 'inventory/stock_list.html', {'stocks': stocks})
 
 
