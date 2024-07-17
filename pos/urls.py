@@ -5,9 +5,7 @@ app_name = 'pos_system'
 
 urlpatterns = [
     path('', views.pos_dashboard, name='pos_dashboard'),
-    #path('transaction/new/', views.create_transaction, name='create_transaction'),
-    path('wholesale_pos/', views.wholesale_pos, name='wholesale_pos'),
-    path('retail_pos/', views.retail_pos, name='retail_pos'),
+    path('transaction/new/', views.create_transaction, name='create_transaction'),
     path('transaction/<int:pk>/', views.transaction_detail, name='transaction_detail'),
     path('transaction/<int:pk>/add_item/', views.add_transaction_item, name='add_transaction_item'),
     path('reports/', views.transaction_report, name='transaction_report'),
