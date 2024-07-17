@@ -42,25 +42,7 @@ from django import forms
 from django.shortcuts import render, redirect
 from .models import Transaction, Customer
 @login_required
-def wholesale_pos(request):
-    class CustomTransactionForm(forms.ModelForm):
-        class Meta:
-            model = Transaction
-            fields = ['shop']
-            widgets = {
-                'shop': forms.Select(attrs={'class': 'form-control'}),
-            }
-
-    class CustomCustomerForm(forms.ModelForm):
-        class Meta:
-            model = Customer
-            fields = ['name', 'email', 'phone']
-            widgets = {
-                'name': forms.TextInput(attrs={'class': 'form-control'}),
-                'email': forms.EmailInput(attrs={'class': 'form-control'}),
-                'phone': forms.TextInput(attrs={'class': 'form-control'}),
-            }
-
+def create_transaction(request):
     if request.method == 'POST':
         transaction_form = TransactionForm(request.POST)
         customer_form = CustomerForm(request.POST)
@@ -85,32 +67,6 @@ def wholesale_pos(request):
         'customer_form': customer_form
     })
 
-
-@login_required
-def retail_pos(request):
-    if request.method == 'POST':
-        transaction_form = TransactionForm(request.POST)
-        customer_form = CustomerForm(request.POST)
-        
-        if customer_form.is_valid():
-            customer = customer_form.save()
-        else:
-            customer = None
-
-        if transaction_form.is_valid() and customer:
-            transaction_instance = transaction_form.save(commit=False)
-            transaction_instance.customer = customer
-            transaction_instance.seller = request.user.seller  # Set the seller to the logged-in user
-            transaction_instance.save()
-            return redirect('pos_system:transaction_detail', pk=transaction_instance.pk, transaction_type='retail')
-    else:
-        transaction_form = TransactionForm()
-        customer_form = CustomerForm()
-    
-    return render(request, 'pos_system/create_transaction.html', {
-        'transaction_form': transaction_form,
-        'customer_form': customer_form
-    })
 
 
 from django.contrib.auth.decorators import login_required
