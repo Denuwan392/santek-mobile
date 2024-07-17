@@ -50,6 +50,10 @@ def create_transaction(request):
             widgets = {
                 'shop': forms.Select(attrs={'class': 'form-control'}),
             }
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            # Set default shop value here
+            self.fields['shop'].initial = 1  # Replace default_shop_id with your default shop's ID
 
     class CustomCustomerForm(forms.ModelForm):
         class Meta:
