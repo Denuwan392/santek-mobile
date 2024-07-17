@@ -130,7 +130,7 @@ def add_transaction_item(request, pk):
         stock = get_object_or_404(Stock, item=item.id)
         stock.save()
 
-        if item.category.name == 'Accessories':
+        if item.category == 'Accessories':
             accessory_association = get_object_or_404(AccessoryAssociation, serial_number=serial_number, seller=seller)
             accessory_association.quantity -= quantity
             accessory_association.save()
@@ -174,7 +174,7 @@ def remove_transaction_item(request, item_id):
         condition = request.POST.get(f'condition_{item_id}')
         seller = request.user.seller
 
-        if item.category.name.lower() == 'mobile phone':
+        if item.category.lower() == 'mobile phones':
             # Restore the phone back to the Phone table with selected condition and salesman
             Phone.objects.create(
                 serial_number=serial_number,
@@ -201,7 +201,7 @@ def remove_transaction_item(request, item_id):
                     salesman=seller,
                 )
 
-        elif item.category.name.lower() == 'accessories':
+        elif item.category.lower() == 'accessories':
             # Accessory logic
             # Create or update AccessoryAssociation
             association, created = AccessoryAssociation.objects.get_or_create(
@@ -226,7 +226,7 @@ def remove_transaction_item(request, item_id):
     else:
         # Non Main Shop User logic
         # Restore the phone back to the Phone table with default condition and salesman
-        if item.category.name.lower() == 'mobile phone':
+        if item.category.lower() == 'mobile phones':
             Phone.objects.create(
                 serial_number=serial_number,
                 item=item,
