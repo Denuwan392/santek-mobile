@@ -320,7 +320,7 @@ from django.urls import reverse
 
 def calculate_transaction_totals(transaction):
     items = transaction.items.all()
-    total_items_price = sum(item.quantity * item.retail_selling_price for item in items)
+    total_items_price = sum(item.quantity * item.price for item in items)
     
     # Calculate total discount applied to all items
     total_item_discount = sum(item.item_discount for item in items) 
