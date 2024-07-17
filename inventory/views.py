@@ -29,8 +29,7 @@ def item_list(request):
     
     return render(request, 'inventory/item_list.html', {
         'page_obj': page_obj,
-        'stocks': page_obj.object_list,
-        'query': query  # Pass the query to the template
+        'query': query
     })
 
 @login_required
@@ -44,7 +43,11 @@ def stock_list(request):
     paginator = Paginator(stocks, 20)  
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'inventory/stock_list.html', {'page_obj': page_obj,'stocks': stocks})
+    return render(request, 'inventory/stock_list.html', {
+        'page_obj': page_obj,
+        'stocks': page_obj.object_list,
+        'query': query  # Pass the query to the template
+    })
 
 
 @group_required('Stock Manager')
