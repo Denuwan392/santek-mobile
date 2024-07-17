@@ -62,8 +62,8 @@ def wholesale_pos(request):
             }
 
     if request.method == 'POST':
-        transaction_form = CustomTransactionForm(request.POST)
-        customer_form = CustomCustomerForm(request.POST)
+        transaction_form = TransactionForm(request.POST)
+        customer_form = CustomerForm(request.POST)
         
         if customer_form.is_valid():
             customer = customer_form.save()
@@ -75,11 +75,11 @@ def wholesale_pos(request):
             transaction_instance.customer = customer
             transaction_instance.seller = request.user.seller  # Set the seller to the logged-in user
             transaction_instance.save()
-            return redirect('pos_system:transaction_detail', pk=transaction_instance.pk, transaction_type='wholesale')
+            return redirect('pos_system:transaction_detail', pk=transaction_instance.pk)
     else:
-        transaction_form = CustomTransactionForm()
-        customer_form = CustomCustomerForm()
-
+        transaction_form = TransactionForm()
+        customer_form = CustomerForm()
+    
     return render(request, 'pos_system/create_transaction.html', {
         'transaction_form': transaction_form,
         'customer_form': customer_form
@@ -343,7 +343,7 @@ from django.urls import reverse
 
 def calculate_transaction_totals(transaction):
     items = transaction.items.all()
-    total_items_price = sum(item.quantity * item.price for item in items)
+    total_items_price = sum(item.quantity * item.wholesale_selling_price for item in items)
     
     # Calculate total discount applied to all items
     total_item_discount = sum(item.item_discount for item in items) 
@@ -365,53 +365,30 @@ def calculate_transaction_totals(transaction):
 
     return items, total_items_price, total_discount, balance
 
-def transaction_detail(request, pk, transaction_type):
+def transaction_detail(request, pk):
     transaction = get_object_or_404(Transaction, pk=pk)
-    if transaction_type == 'wholesale':
-        items, total_amount, total_discount, balance = calculate_transaction_totals(transaction)
+    items, total_amount, total_discount, balance = calculate_transaction_totals(transaction)
 
-        is_main_shop_user = request.user.groups.filter(name='Main Shop').exists()
+    is_main_shop_user = request.user.groups.filter(name='Main Shop').exists()
 
-        if request.method == 'POST':
-            form = TransactionUpdateForm(request.POST, instance=transaction)
-            if form.is_valid():
-                form.save()
-                return redirect('pos_system:transaction_detail', pk=transaction.pk)
-        else:
-            form = TransactionUpdateForm(instance=transaction)
-        
-        return render(request, 'pos_system/transaction_detail.html', {
-            'transaction': transaction,
-            'items': items,
-            'total_amount': total_amount,  # Use total_items_price here
-            'total_discount': total_discount,  # Pass total discount to the template
-            'form': form,
-            'balance': balance,
-            'is_main_shop_user': is_main_shop_user,
-        })
+    if request.method == 'POST':
+        form = TransactionUpdateForm(request.POST, instance=transaction)
+        if form.is_valid():
+            form.save()
+            return redirect('pos_system:transaction_detail', pk=transaction.pk)
+    else:
+        form = TransactionUpdateForm(instance=transaction)
     
-    elif transaction_type == 'retail':
-        items, total_amount, total_discount, balance = calculate_transaction_totals(transaction)
+    return render(request, 'pos_system/transaction_detail.html', {
+        'transaction': transaction,
+        'items': items,
+        'total_amount': total_amount,  # Use total_items_price here
+        'total_discount': total_discount,  # Pass total discount to the template
+        'form': form,
+        'balance': balance,
+        'is_main_shop_user': is_main_shop_user,
+    })
 
-        is_main_shop_user = request.user.groups.filter(name='Main Shop').exists()
-
-        if request.method == 'POST':
-            form = TransactionUpdateForm(request.POST, instance=transaction)
-            if form.is_valid():
-                form.save()
-                return redirect('pos_system:transaction_detail', pk=transaction.pk)
-        else:
-            form = TransactionUpdateForm(instance=transaction)
-        
-        return render(request, 'pos_system/transaction_detail.html', {
-            'transaction': transaction,
-            'items': items,
-            'total_amount': total_amount,  # Use total_items_price here
-            'total_discount': total_discount,  # Pass total discount to the template
-            'form': form,
-            'balance': balance,
-            'is_main_shop_user': is_main_shop_user,
-        })
 
 
 
