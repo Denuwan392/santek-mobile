@@ -4,6 +4,11 @@
 
 {% block content %}
 <h1 class="my-4">Item List</h1>
+<!-- Search form -->
+<form method="get" class="form-inline mb-3">
+    <input type="text" name="q" class="form-control mr-2" placeholder="Search by Name" value="{{ query }}">
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
 <table class="table table-striped">
     <thead>
         <tr>
