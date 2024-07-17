@@ -27,7 +27,11 @@ def item_list(request):
     page_obj = paginator.get_page(page_number)
 
     
-    return render(request, 'inventory/item_list.html', {'page_obj': page_obj, 'items': items})
+    return render(request, 'inventory/item_list.html', {
+        'page_obj': page_obj,
+        'stocks': page_obj.object_list,
+        'query': query  # Pass the query to the template
+    })
 
 @login_required
 def stock_list(request):
