@@ -19,8 +19,12 @@ def item_list(request):
     if query:
         items = items.filter(Q(name__icontains=query))
 
+    paginator = Paginator(items, 20)  
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     
-    return render(request, 'inventory/item_list.html', {'items': items})
+    return render(request, 'inventory/item_list.html', {'page_obj': page_obj,, 'items': items})
 
 @login_required
 def stock_list(request):
