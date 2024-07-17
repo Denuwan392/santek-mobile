@@ -60,6 +60,7 @@ def create_transaction(request):
                 'email': forms.EmailInput(attrs={'class': 'form-control'}),
                 'phone': forms.TextInput(attrs={'class': 'form-control'}),
             }
+
     if request.method == 'POST':
         transaction_form = CustomTransactionForm(request.POST)
         customer_form = CustomCustomerForm(request.POST)
@@ -76,14 +77,13 @@ def create_transaction(request):
             transaction_instance.save()
             return redirect('pos_system:transaction_detail', pk=transaction_instance.pk)
     else:
-        transaction_form = TransactionForm()
-        customer_form = CustomerForm()
-    
+        transaction_form = CustomTransactionForm()
+        customer_form = CustomCustomerForm()
+
     return render(request, 'pos_system/create_transaction.html', {
         'transaction_form': transaction_form,
         'customer_form': customer_form
     })
-
 
 
 from django.contrib.auth.decorators import login_required
