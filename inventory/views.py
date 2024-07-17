@@ -14,6 +14,12 @@ from .decorators import group_required
 @login_required
 def item_list(request):
     items = Item.objects.all()
+    query = request.GET.get('q', '')  # Use empty string as default
+
+    if query:
+        items = items.filter(Q(name__icontains=query))
+
+    
     return render(request, 'inventory/item_list.html', {'items': items})
 
 @login_required
