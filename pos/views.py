@@ -43,9 +43,26 @@ from django.shortcuts import render, redirect
 from .models import Transaction, Customer
 @login_required
 def create_transaction(request):
+    class CustomTransactionForm(forms.ModelForm):
+        class Meta:
+            model = Transaction
+            fields = ['shop']
+            widgets = {
+                'shop': forms.Select(attrs={'class': 'form-control'}),
+            }
+
+    class CustomCustomerForm(forms.ModelForm):
+        class Meta:
+            model = Customer
+            fields = ['name', 'email', 'phone']
+            widgets = {
+                'name': forms.TextInput(attrs={'class': 'form-control'}),
+                'email': forms.EmailInput(attrs={'class': 'form-control'}),
+                'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            }
     if request.method == 'POST':
-        transaction_form = TransactionForm(request.POST)
-        customer_form = CustomerForm(request.POST)
+        transaction_form = CustomTransactionForm(request.POST)
+        customer_form = CustomCustomerForm(request.POST)
         
         if customer_form.is_valid():
             customer = customer_form.save()
