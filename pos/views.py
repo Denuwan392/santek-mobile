@@ -126,7 +126,7 @@ def add_transaction_item(request, pk):
         quantity = int(request.POST.get('quantity', 1))
         serial_number = request.POST.get('serial_number')
         item = get_object_or_404(Item, id=item_id)
-        price = item.price
+        price = item.retail_selling_price
         stock = get_object_or_404(Stock, item=item.id)
         stock.save()
 
