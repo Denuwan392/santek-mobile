@@ -181,32 +181,38 @@ from .models import Item, Accessory, Category
 from .decorators import group_required
 @group_required('Stock Manager')
 def add_accessory(request):
-    #accessories_category = get_object_or_404(Category, name='Accessories')
-    
     if request.method == 'POST':
-        item_id = request.POST.get('item')
+        serial_number = request.POST.get('serial_number')
         quantity = request.POST.get('quantity')
-        # Fetch the item and its price
-        item = get_object_or_404(Item, id=item_id, category='Accessories')
-        serial_number = item.serial_number
-        cost=item.cost,
-        retail_selling_price=item.retail_selling_price,
-        retail_minimum_price=item.retail_minimum_price,
-        wholesale_selling_price=item.wholesale_selling_price,
+        
+        # Fetch the item based on the serial number
+        item = get_object_or_404(Item, serial_number=serial_number, category='Accessories')
+
         # Create or update the Accessory
         accessory, created = Accessory.objects.get_or_create(
             serial_number=serial_number,
             item=item,
-            defaults={'quantity': quantity}  # Default values can be adjusted
+            defaults={
+                'quantity': quantity,
+                'cost': item.cost,
+                'retail_selling_price': item.retail_selling_price,
+                'retail_minimum_price': item.retail_minimum_price,
+                'wholesale_selling_price': item.wholesale_selling_price,
+            }
         )
+
         if not created:
             accessory.quantity += int(quantity)
             accessory.save()
+
         messages.success(request, 'Accessory added successfully.')
         return redirect('add_accessory')
+
     items = Item.objects.filter(category='Accessories')
     accessories = Accessory.objects.filter(item__category='Accessories')
     return render(request, 'inventory/add_accessory.html', {'items': items, 'accessories': accessories})
+
+
 @group_required('Stock Manager')
 def accessory_list(request):
     accessories = Accessory.objects.all()
