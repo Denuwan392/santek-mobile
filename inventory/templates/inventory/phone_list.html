@@ -103,12 +103,13 @@
                 <form id="addPhoneForm" method="post" action="{% url 'add_phone' %}">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label for="item">Item</label>
-                        <select class="form-control" id="item" name="item" required>
+                        <label for="input-datalist">Items</label>
+                        <input type="text" class="form-control" placeholder="Phones" list="list-item" name="item" id="item" required>
+                        <datalist id="list-item">
                             {% for item in items %}
-                            <option value="{{ item.id }}">{{ item.name }}</option>
+                            <option value="{{ item.name }}">{{ item.name }}</option>
                             {% endfor %}
-                        </select>
+                        </datalist>
                     </div>
                     <div class="form-group">
                         <label for="condition">Condition</label>
@@ -155,6 +156,11 @@
             });
         });
     });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', e => {
+        $('#input-datalist').autocomplete()
+    }, false);
 </script>
 
 {% endblock %}
