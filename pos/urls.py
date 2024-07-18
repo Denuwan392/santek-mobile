@@ -23,7 +23,7 @@ urlpatterns = [
     path('add_item_discount/<int:item_id>/', views.add_item_discount, name='add_item_discount'),
     path('transaction/<int:pk>/receipt/', views.receipt_view, name='receipt_view'),
 
-    
+    path('get_item_by_serial/', views.get_item_by_serial, name='get_item_by_serial'),
 
 
 ]
