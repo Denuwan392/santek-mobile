@@ -94,7 +94,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import Transaction, TransactionItem
 from inventory.models import Item, Stock, Phone, AccessoryAssociation  # Import AccessoryAssociation model
-'''
+
 @login_required
 def add_transaction_item(request, pk):
     transaction = get_object_or_404(Transaction, pk=pk)
@@ -150,49 +150,6 @@ def add_transaction_item(request, pk):
         'accessory_serial_map': accessory_serial_map,  # Pass the accessory serial numbers mapping to the template
     })
 
-'''
-from django.http import JsonResponse
-
-@login_required
-def add_transaction_item(request, pk):
-    transaction = get_object_or_404(Transaction, pk=pk)
-    items = Item.objects.all()
-
-    if request.method == 'POST':
-        serial_number = request.POST.get('serial_number')
-        item = get_object_or_404(Item, serial_number=serial_number)
-        quantity = int(request.POST.get('quantity', 1))
-        price = item.retail_selling_price
-
-        # Reduce the stock accordingly
-        stock = get_object_or_404(Stock, item=item.id)
-        stock.save()
-
-        transaction_item = TransactionItem(transaction=transaction, item=item, quantity=quantity, serial_number=serial_number, price=price)
-        transaction_item.save()
-        
-        return redirect('pos_system:transaction_detail', pk=pk)
-    
-    return render(request, 'pos_system/add_transaction_item.html', {
-        'transaction': transaction,
-    })
-
-@login_required
-def get_item_by_serial(request):
-    serial_number = request.GET.get('serial_number')
-    try:
-        item = Item.objects.get(serial_number=serial_number)
-        response = {
-            'item_id': item.id,
-            'name': item.name,
-            'price': item.retail_selling_price,
-            'quantity': 1,  # Default quantity
-        }
-    except Item.DoesNotExist:
-        response = {
-            'error': 'Item not found'
-        }
-    return JsonResponse(response)
 
 
 
