@@ -27,33 +27,5 @@
     <button type="submit" class="btn btn-primary">Add Item</button>
 </form>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const serialInput = document.getElementById('serial_number');
-        const itemIdInput = document.getElementById('item_id');
-        const nameInput = document.getElementById('name');
-        const priceInput = document.getElementById('price');
-        const quantityInput = document.getElementById('quantity');
 
-        serialInput.addEventListener('change', function() {
-            const serialNumber = serialInput.value;
-
-            fetch(`/get_item_by_serial/?serial_number=${serialNumber}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        alert(data.error);
-                    } else {
-                        itemIdInput.value = data.item_id;
-                        nameInput.value = data.name;
-                        priceInput.value = data.price;
-                        quantityInput.value = data.quantity;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching item data:', error);
-                });
-        });
-    });
-</script>
 {% endblock %}
