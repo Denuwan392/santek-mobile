@@ -61,8 +61,8 @@
 
         function updateSerialOptions() {
             const selectedItemId = itemSelect.value;
-            const serialNumbers = itemSerialMap[selectedItemId]  [];
-            const accessorySerialNumbers = accessorySerialMap[selectedItemId]  [];
+            const serialNumbers = itemSerialMap[selectedItemId] || [];
+            const accessorySerialNumbers = accessorySerialMap[selectedItemId] || [];
             
             // Clear existing options
             serialSelect.innerHTML = '';
