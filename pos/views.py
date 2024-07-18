@@ -151,50 +151,22 @@ def add_transaction_item(request, pk):
     })
 
 '''
+from django.http import JsonResponse
 
 @login_required
 def add_transaction_item(request, pk):
     transaction = get_object_or_404(Transaction, pk=pk)
     items = Item.objects.all()
 
-    # Get the associated seller for the current user
-    seller = request.user.seller
-
-    # Filter phones and accessory associations based on the associated seller
-    phones = Phone.objects.filter(salesman=seller)
-    accessory_associations = AccessoryAssociation.objects.filter(seller=seller)
-
-    # Create dictionaries for serial mappings
-    serial_item_map = {}
-    for phone in phones:
-        serial_item_map[phone.serial_number] = {
-            'item_id': phone.item.id,
-            'price': phone.item.retail_selling_price,
-            'quantity': phone.quantity
-        }
-    for association in accessory_associations:
-        serial_item_map[association.accessory.serial_number] = {
-            'item_id': association.accessory.item.id,
-            'price': association.accessory.item.retail_selling_price,
-            'quantity': association.quantity
-        }
-    
     if request.method == 'POST':
-        item_id = request.POST.get('item')
-        quantity = int(request.POST.get('quantity', 1))
         serial_number = request.POST.get('serial_number')
-        item = get_object_or_404(Item, id=item_id)
+        item = get_object_or_404(Item, serial_number=serial_number)
+        quantity = int(request.POST.get('quantity', 1))
         price = item.retail_selling_price
+
+        # Reduce the stock accordingly
         stock = get_object_or_404(Stock, item=item.id)
         stock.save()
-
-        if item.category == 'Accessories':
-            accessory_association = get_object_or_404(AccessoryAssociation, serial_number=serial_number, seller=seller)
-            accessory_association.quantity -= quantity
-            accessory_association.save()
-        else:
-            phone = get_object_or_404(Phone, serial_number=serial_number, salesman=seller)
-            phone.delete()
 
         transaction_item = TransactionItem(transaction=transaction, item=item, quantity=quantity, serial_number=serial_number, price=price)
         transaction_item.save()
@@ -203,9 +175,25 @@ def add_transaction_item(request, pk):
     
     return render(request, 'pos_system/add_transaction_item.html', {
         'transaction': transaction,
-        'items': items,
-        'serial_item_map': serial_item_map,
     })
+
+@login_required
+def get_item_by_serial(request):
+    serial_number = request.GET.get('serial_number')
+    try:
+        item = Item.objects.get(serial_number=serial_number)
+        response = {
+            'item_id': item.id,
+            'name': item.name,
+            'price': item.retail_selling_price,
+            'quantity': 1,  # Default quantity
+        }
+    except Item.DoesNotExist:
+        response = {
+            'error': 'Item not found'
+        }
+    return JsonResponse(response)
+
 
 
 
