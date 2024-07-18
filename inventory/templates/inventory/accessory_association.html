@@ -3,19 +3,15 @@
 {% block content %}
 <h1>Accessory Association Page</h1>
 
-<form method="POST">
-    {% csrf_token %}
-    <div class="form-group">
-    <label for="seller">Select Seller:</label>
-    <select name="seller" id="seller" class="form-control">
-        <option value="">Select Seller</option>
-        {% for seller in sellers %}
-            <option value="{{ seller.id }}" {% if seller.id == 1 %}selected{% endif %}>
-                {{ seller.name }}
-            </option>
-        {% endfor %}
-    </select>
-</div>
+<div class="form-group">
+        <label for="seller">Select Seller:</label>
+        <select name="seller" id="seller" class="form-control">
+            <option value="">Select Seller</option>
+            {% for seller in sellers %}
+                <option value="{{ seller.id }}">{{ seller.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
 
     
     <div class="form-group">
