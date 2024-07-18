@@ -2,6 +2,8 @@
 
 {% block content %}
 <h1>Accessory Association Page</h1>
+<form method="POST">
+    {% csrf_token %}
 
 <div class="form-group">
         <label for="seller">Select Seller:</label>
