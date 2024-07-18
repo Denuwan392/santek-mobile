@@ -98,56 +98,52 @@ from inventory.models import Item, Stock, Phone, AccessoryAssociation  # Import 
 @login_required
 def add_transaction_item(request, pk):
     transaction = get_object_or_404(Transaction, pk=pk)
-    items = Item.objects.all()  # Fetch all items from the inventory
     
     # Get the associated seller for the current user
     seller = request.user.seller
     
-    # Filter phones based on the associated seller
-    phones = Phone.objects.filter(salesman=seller)
-
-    # Filter accessory associations based on the associated seller
-    accessory_associations = AccessoryAssociation.objects.filter(seller=seller)
-
-    # Create a dictionary mapping item ID to its serial numbers for phones
-    item_serial_map = {
-        item.id: [phone.serial_number for phone in phones if phone.item_id == item.id]
-        for item in items
-    }
-
-    # Create a dictionary mapping item ID to its serial numbers for accessories
-    accessory_serial_map = {
-        item.id: [association.accessory.serial_number for association in accessory_associations if association.accessory.item_id == item.id]
-        for item in items
-    }
-    
     if request.method == 'POST':
-        item_id = request.POST.get('item')
-        quantity = int(request.POST.get('quantity', 1))
         serial_number = request.POST.get('serial_number')
-        item = get_object_or_404(Item, id=item_id)
-        price = item.retail_selling_price
-        stock = get_object_or_404(Stock, item=item.id)
-        stock.save()
-
-        if item.category == 'Accessories':
-            accessory_association = get_object_or_404(AccessoryAssociation, serial_number=serial_number, seller=seller)
-            accessory_association.quantity -= quantity
-            accessory_association.save()
-        else:
-            phone = get_object_or_404(Phone, serial_number=serial_number, salesman=seller)
+        quantity = int(request.POST.get('quantity', 1))
+        
+        # Check if the serial number belongs to a phone or accessory
+        try:
+            # Try to get the phone based on the serial number
+            phone = Phone.objects.get(serial_number=serial_number, salesman=seller)
+            item = phone.item
+            price = item.retail_selling_price
             phone.delete()
-
-        transaction_item = TransactionItem(transaction=transaction, item=item, quantity=quantity, serial_number=serial_number, price=price)
+        except Phone.DoesNotExist:
+            # If the phone doesn't exist, check for accessories
+            try:
+                accessory_association = AccessoryAssociation.objects.get(accessory__serial_number=serial_number, seller=seller)
+                item = accessory_association.accessory.item
+                price = item.retail_selling_price
+                if accessory_association.quantity < quantity:
+                    raise ValueError('Not enough quantity available')
+                accessory_association.quantity -= quantity
+                accessory_association.save()
+            except AccessoryAssociation.DoesNotExist:
+                # Handle case where serial number doesn't exist
+                return render(request, 'pos_system/add_transaction_item.html', {
+                    'transaction': transaction,
+                    'error': 'Serial number not found',
+                })
+        
+        # Create the transaction item
+        transaction_item = TransactionItem(
+            transaction=transaction, 
+            item=item, 
+            quantity=quantity, 
+            serial_number=serial_number, 
+            price=price
+        )
         transaction_item.save()
         
         return redirect('pos_system:transaction_detail', pk=pk)
     
     return render(request, 'pos_system/add_transaction_item.html', {
         'transaction': transaction,
-        'items': items,
-        'item_serial_map': item_serial_map,
-        'accessory_serial_map': accessory_serial_map,  # Pass the accessory serial numbers mapping to the template
     })
 
 
