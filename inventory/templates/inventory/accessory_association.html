@@ -2,10 +2,10 @@
 
 {% block content %}
 <h1>Accessory Association Page</h1>
+
 <form method="POST">
     {% csrf_token %}
-
-<div class="form-group">
+    <div class="form-group">
         <label for="seller">Select Seller:</label>
         <select name="seller" id="seller" class="form-control">
             <option value="">Select Seller</option>
@@ -14,17 +14,7 @@
             {% endfor %}
         </select>
     </div>
-
     
-    <div class="form-group">
-        <label for="item">Accessory Name:</label>
-        <select name="item" id="item" class="form-control">
-            <option value="">Accessory Name</option>
-            {% for accessory in accessories %}
-                <option value="{{ accessory.item.id }}">{{ accessory.item.name }}</option>
-            {% endfor %}
-        </select>
-    </div>
     
     <div class="form-group">
         <label for="quantity">Associate Quantity:</label>
