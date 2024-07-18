@@ -5,7 +5,7 @@ from simple_history.models import HistoricalRecords
 
 class Customer(models.Model):
     name = models.CharField(max_length=255)
-    email = models.EmailField()
+    email = models.EmailField(blank=True)
     phone = models.CharField(max_length=20)
     history = HistoricalRecords()
 
