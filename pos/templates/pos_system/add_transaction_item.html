@@ -13,68 +13,52 @@
         <input type="text" class="form-control" id="serial_number" name="serial_number" required>
     </div>
 
-    <div class="form-group">
-        <label for="item">Item</label>
-        <select class="form-control" id="item" name="item" readonly>
-            {% for item in items %}
-                <option value="{{ item.id }}">{{ item.name }} - Rs.{{ item.retail_selling_price }}</option>
-            {% endfor %}
-        </select>
-    </div>
+    <input type="hidden" id="item_id" name="item">
 
     <div class="form-group">
-        <label for="quantity">Quantity</label>
-        <input type="number" class="form-control" id="quantity" name="quantity" min="1" value="1" required>
+        <label for="name">Item</label>
+        <input type="text" class="form-control" id="name" readonly>
     </div>
 
     <div class="form-group">
         <label for="price">Price</label>
         <input type="text" class="form-control" id="price" name="price" readonly>
     </div>
+
+    <div class="form-group">
+        <label for="quantity">Quantity</label>
+        <input type="number" class="form-control" id="quantity" name="quantity" min="1" value="1" required>
+    </div>
     
     <button type="submit" class="btn btn-primary">Add Item</button>
 </form>
 
-<h3>Available Items</h3>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Item Name</th>
-            <th>Price</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in items %}
-        <tr>
-            <td>{{ item.name }}</td>
-            <td>Rs. {{ item.retail_selling_price }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const serialInput = document.getElementById('serial_number');
-        const itemSelect = document.getElementById('item');
-        const quantityInput = document.getElementById('quantity');
+        const itemIdInput = document.getElementById('item_id');
+        const nameInput = document.getElementById('name');
         const priceInput = document.getElementById('price');
+        const quantityInput = document.getElementById('quantity');
 
-        const serialItemMap = {{ serial_item_map|safe }};
-
-        serialInput.addEventListener('input', function() {
+        serialInput.addEventListener('change', function() {
             const serialNumber = serialInput.value;
-            const itemData = serialItemMap[serialNumber] || null;
 
-            if (itemData) {
-                itemSelect.value = itemData.item_id;
-                quantityInput.value = itemData.quantity;
-                priceInput.value = itemData.price;
-            } else {
-                itemSelect.value = '';
-                quantityInput.value = 1;
-                priceInput.value = '';
-            }
+            fetch(`/get_item_by_serial/?serial_number=${serialNumber}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        itemIdInput.value = data.item_id;
+                        nameInput.value = data.name;
+                        priceInput.value = data.price;
+                        quantityInput.value = data.quantity;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching item data:', error);
+                });
         });
     });
 </script>
