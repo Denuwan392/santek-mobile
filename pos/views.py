@@ -64,6 +64,11 @@ def create_transaction(request):
                 'email': forms.EmailInput(attrs={'class': 'form-control'}),
                 'phone': forms.TextInput(attrs={'class': 'form-control'}),
             }
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            # Ensure email and phone fields are not pre-filled with default values
+            self.fields['email'].initial = None
+            self.fields['phone'].initial = None
 
     if request.method == 'POST':
         transaction_form = CustomTransactionForm(request.POST)
