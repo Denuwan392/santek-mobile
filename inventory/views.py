@@ -272,13 +272,13 @@ def accessory_associate_seller(request):
     if request.method == "POST":
         seller_id = request.POST.get('seller')
         serial_number = request.POST.get('serial_number')
-        quantity = int(request.POST.get('quantity'))
+        #quantity = int(request.POST.get('quantity'))
         
         seller = get_object_or_404(Seller, id=seller_id)
         
         # Filter accessories by serial_number (assuming serial_number is not unique)
         accessories = Accessory.objects.filter(serial_number=serial_number)
-        
+        quantity = accessories.quantity
         # Handle case where no accessory is found
         if not accessories.exists():
             return HttpResponseBadRequest("Accessory not found.")
