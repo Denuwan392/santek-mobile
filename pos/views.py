@@ -94,7 +94,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import Transaction, TransactionItem
 from inventory.models import Item, Stock, Phone, AccessoryAssociation  # Import AccessoryAssociation model
-
+'''
 @login_required
 def add_transaction_item(request, pk):
     transaction = get_object_or_404(Transaction, pk=pk)
@@ -150,6 +150,76 @@ def add_transaction_item(request, pk):
         'accessory_serial_map': accessory_serial_map,  # Pass the accessory serial numbers mapping to the template
     })
 
+'''
+
+@login_required
+def add_transaction_item(request, pk):
+    transaction = get_object_or_404(Transaction, pk=pk)
+    items = Item.objects.all()  # Fetch all items from the inventory
+
+    # Get the associated seller for the current user
+    seller = request.user.seller
+    
+    # Filter phones based on the associated seller
+    phones = Phone.objects.filter(salesman=seller)
+
+    # Filter accessory associations based on the associated seller
+    accessory_associations = AccessoryAssociation.objects.filter(seller=seller)
+
+    # Create a dictionary mapping item ID to its serial numbers for phones
+    item_serial_map = {
+        item.id: [phone.serial_number for phone in phones if phone.item_id == item.id]
+        for item in items
+    }
+
+    # Create a dictionary mapping item ID to its serial numbers for accessories
+    accessory_serial_map = {
+        item.id: [association.accessory.serial_number for association in accessory_associations if association.accessory.item_id == item.id]
+        for item in items
+    }
+
+    # Create a dictionary mapping serial numbers to their respective items
+    serial_item_map = {}
+    for phone in phones:
+        serial_item_map[phone.serial_number] = {
+            'price': phone.item.retail_selling_price,
+            'quantity': phone.quantity
+        }
+    for association in accessory_associations:
+        serial_item_map[association.accessory.serial_number] = {
+            'price': association.accessory.item.retail_selling_price,
+            'quantity': association.quantity
+        }
+    
+    if request.method == 'POST':
+        item_id = request.POST.get('item')
+        quantity = int(request.POST.get('quantity', 1))
+        serial_number = request.POST.get('serial_number')
+        item = get_object_or_404(Item, id=item_id)
+        price = item.retail_selling_price
+        stock = get_object_or_404(Stock, item=item.id)
+        stock.save()
+
+        if item.category == 'Accessories':
+            accessory_association = get_object_or_404(AccessoryAssociation, serial_number=serial_number, seller=seller)
+            accessory_association.quantity -= quantity
+            accessory_association.save()
+        else:
+            phone = get_object_or_404(Phone, serial_number=serial_number, salesman=seller)
+            phone.delete()
+
+        transaction_item = TransactionItem(transaction=transaction, item=item, quantity=quantity, serial_number=serial_number, price=price)
+        transaction_item.save()
+        
+        return redirect('pos_system:transaction_detail', pk=pk)
+    
+    return render(request, 'pos_system/add_transaction_item.html', {
+        'transaction': transaction,
+        'items': items,
+        'item_serial_map': item_serial_map,
+        'accessory_serial_map': accessory_serial_map,  # Pass the accessory serial numbers mapping to the template
+        'serial_item_map': serial_item_map,  # Pass the serial to item mapping to the template
+    })
 
 
 from django.shortcuts import render, redirect, get_object_or_404
