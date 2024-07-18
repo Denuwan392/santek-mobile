@@ -28,6 +28,11 @@
         <label for="quantity">Quantity</label>
         <input type="number" class="form-control" id="quantity" name="quantity" min="1" value="1" required>
     </div>
+
+    <div class="form-group">
+        <label for="price">Price</label>
+        <input type="text" class="form-control" id="price" name="price" readonly>
+    </div>
     
     <button type="submit" class="btn btn-primary">Add Item</button>
 </form>
@@ -54,10 +59,13 @@
     document.addEventListener('DOMContentLoaded', function() {
         const itemSelect = document.getElementById('item');
         const serialSelect = document.getElementById('serial_number');
+        const quantityInput = document.getElementById('quantity');
+        const priceInput = document.getElementById('price');
         
         // Mapping from Django context (item_serial_map and accessory_serial_map)
         const itemSerialMap = {{ item_serial_map|safe }};
         const accessorySerialMap = {{ accessory_serial_map|safe }};
+        const serialItemMap = {{ serial_item_map|safe }};
 
         function updateSerialOptions() {
             const selectedItemId = itemSelect.value;
@@ -89,10 +97,25 @@
                 option.textContent = 'No serial numbers available';
                 serialSelect.appendChild(option);
             }
+
+            // Update the fields based on the first serial number
+            if (serialSelect.options.length > 0) {
+                serialSelect.value = serialSelect.options[0].value;
+                updateFields(serialSelect.options[0].value);
+            }
+        }
+
+        function updateFields(serialNumber) {
+            const itemData = serialItemMap[serialNumber] || {};
+            quantityInput.value = itemData.quantity || 1;
+            priceInput.value = itemData.price || '';
         }
 
         // Event listeners for item selection change
         itemSelect.addEventListener('change', updateSerialOptions);
+        serialSelect.addEventListener('change', function() {
+            updateFields(this.value);
+        });
 
         // Initial call to populate serial numbers based on initial selected item
         updateSerialOptions();
