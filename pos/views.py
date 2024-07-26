@@ -171,7 +171,7 @@ def remove_transaction_item(request, item_id):
     item = transaction_item.item
     serial_number = transaction_item.serial_number
     quantity = transaction_item.quantity
-    price = transaction_item.retail_selling_price
+    price = transaction_item.price
 
     if request.user.groups.filter(name='Main Shop').exists():
         # Main Shop User logic
