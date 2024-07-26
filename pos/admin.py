@@ -5,8 +5,8 @@ from simple_history.admin import SimpleHistoryAdmin
 
 @admin.register(Customer)
 class CustomerAdmin(SimpleHistoryAdmin):
-    list_display = ('name', 'email', 'phone',)
-    search_fields = ('email', 'phone')
+    list_display = ('name',  'phone',)
+    search_fields = ('phone')
 
 
 @admin.register(Transaction)
