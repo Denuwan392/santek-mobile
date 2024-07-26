@@ -184,7 +184,7 @@ def remove_transaction_item(request, item_id):
                 serial_number=serial_number,
                 item=item,
                 condition=condition,
-                price=price,
+                retail_selling_price=price,
                 salesman=seller,
             )
 
