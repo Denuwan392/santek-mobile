@@ -240,7 +240,7 @@ def accessory_associate_seller(request):
 
         # Filter accessories by serial_number (assuming serial_number is not unique)
         accessories = Accessory.objects.filter(serial_number=serial_number)
-        quantity = accessories.quantity
+        #quantity = accessories.quantity
 
         # Handle case where no accessory is found
         if not accessories.exists():
