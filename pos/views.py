@@ -58,16 +58,16 @@ def create_transaction(request):
     class CustomCustomerForm(forms.ModelForm):
         class Meta:
             model = Customer
-            fields = ['name', 'email', 'phone']
+            fields = ['name',  'phone']
             widgets = {
                 'name': forms.TextInput(attrs={'class': 'form-control'}),
-                'email': forms.EmailInput(attrs={'class': 'form-control'}),
+                
                 'phone': forms.TextInput(attrs={'class': 'form-control'}),
             }
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             # Ensure email and phone fields are not pre-filled with default values
-            self.fields['email'].initial = None
+            
             self.fields['phone'].initial = None
 
     if request.method == 'POST':
