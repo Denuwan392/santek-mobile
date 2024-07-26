@@ -22,7 +22,7 @@ class TransactionItemForm(forms.ModelForm):
 class CustomerForm(forms.ModelForm):
     class Meta:
         model = Customer
-        fields = ['name', 'email', 'phone']
+        fields = ['name',  'phone']
 
 
 class TransactionUpdateForm(forms.ModelForm):
