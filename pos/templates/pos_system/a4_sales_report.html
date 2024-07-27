@@ -1,0 +1,94 @@
+<!-- pos_system/templates/pos_system/a4_sales_report.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Sales Report</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @media print {
+            body {
+                width: 210mm; /* A4 width */
+                height: 297mm; /* A4 height */
+                margin: 0;
+                padding: 10mm;
+                font-size: 12pt;
+            }
+            .no-print {
+                display: none; /* Hide print button on print */
+            }
+        }
+    </style>
+</head>
+<body onload="window.print();">
+    <div class="container">
+        <img src="{% static 'images/Artboard 3@4x-8.png' %}" width="300" height="auto" class="d-inline-block align-top" alt="">
+        <h2 class="text-center mb-4">Daily Sales Report</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Invoice Number</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Total Amount</th>
+                        <th>Profit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tx in transactions_with_profit %}
+                    <tr>
+                        <td>{{ tx.transaction.id }}</td>
+                        <td>{{ tx.transaction.invoice_number }}</td>
+                        <td>{{ tx.transaction.customer.name }}</td>
+                        <td>{{ tx.transaction.transaction_date }}</td>
+                        <td>Rs. {{ tx.transaction.total_amount }}</td>
+                        <td>Rs. {{ tx.profit }}</td>
+                        
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="4">
+                            Total Sales
+                        </td>
+                        <td>
+                            Rs. {{ total_sales }}
+                        </td>
+                        <td></td>
+                    </tr>
+
+                    <tr >
+                        <td colspan="5">
+                            Total Profit
+                        </td>
+                        <td>
+                            Rs. {{ total_profit }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            Date
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            sign
+                        </td>
+                        <td></td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+        <h3>Total Sales: Rs. {{ total_sales }}</h3>
+        <h3>Total Profit: Rs. {{ total_profit }}</h3>
+        
+    </div>
+</body>
+</html>
