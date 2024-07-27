@@ -22,6 +22,8 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('add_item_discount/<int:item_id>/', views.add_item_discount, name='add_item_discount'),
     path('transaction/<int:pk>/receipt/', views.receipt_view, name='receipt_view'),
+    path('daily_sales_report/', daily_sales_report, name='daily_sales_report'),
+    path('print_daily_sales_report/<str:start_date>/<str:end_date>/', print_daily_sales_report, name='print_daily_sales_report'),
 
 
 
