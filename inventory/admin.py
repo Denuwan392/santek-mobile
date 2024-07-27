@@ -34,6 +34,7 @@ class AccessoryAdmin(SimpleHistoryAdmin):
     list_display = ('serial_number', 'item', 'quantity', )
     search_fields = ('serial_number', 'item__name')
     list_filter = ('item', 'quantity', )
+    list_editable = ('quantity',)
 
 class AccessoryAssociationAdmin(SimpleHistoryAdmin):
     list_display = ('accessory', 'seller', 'serial_number','quantity', 'shipment')
