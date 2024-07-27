@@ -523,6 +523,11 @@ from django.db.models import Sum
 from django.utils.timezone import localdate
 from .forms import DateRangeForm
 from django.http import JsonResponse
+from django.db.models import Sum, F
+from django.utils.timezone import localdate
+from .forms import DateRangeForm
+from django.http import JsonResponse
+from .models import Transaction, TransactionItem
 
 @login_required
 def daily_sales_report(request):
@@ -540,12 +545,55 @@ def daily_sales_report(request):
         end_date = localdate()
 
     sales = Transaction.objects.filter(transaction_date__date__range=[start_date, end_date])
+    
+    # Calculate profit for each transaction
+    transactions_with_profit = []
+    for transaction in sales:
+        profit = sum((item.price - item.item.cost) * item.quantity for item in transaction.items.all())
+        transactions_with_profit.append({
+            'transaction': transaction,
+            'profit': profit
+        })
+
     total_sales = sales.aggregate(total=Sum('total_amount'))['total'] or 0
+    total_profit = sum(tx['profit'] for tx in transactions_with_profit)
 
     return render(request, 'pos_system/daily_sales_report.html', {
-        'sales': sales,
+        'transactions_with_profit': transactions_with_profit,
         'total_sales': total_sales,
+        'total_profit': total_profit,
         'form': form
+    })
+
+
+# pos_system/views.py
+from django.shortcuts import render
+
+# pos_system/views.py
+from django.shortcuts import render
+from django.db.models import Sum
+from django.contrib.auth.decorators import login_required
+from .models import Transaction
+
+@login_required
+def print_daily_sales_report(request, start_date, end_date):
+    sales = Transaction.objects.filter(transaction_date__date__range=[start_date, end_date])
+    
+    transactions_with_profit = []
+    for transaction in sales:
+        profit = sum((item.price - item.item.cost) * item.quantity for item in transaction.items.all())
+        transactions_with_profit.append({
+            'transaction': transaction,
+            'profit': profit
+        })
+
+    total_sales = sales.aggregate(total=Sum('total_amount'))['total'] or 0
+    total_profit = sum(tx['profit'] for tx in transactions_with_profit)
+
+    return render(request, 'pos_system/a4_sales_report.html', {
+        'transactions_with_profit': transactions_with_profit,
+        'total_sales': total_sales,
+        'total_profit': total_profit
     })
 
 
@@ -553,7 +601,6 @@ def daily_sales_report(request):
 from django.db.models import F
 
 @login_required
-
 def customer_debt_report(request):
     customers = Customer.objects.annotate(total_debt=Sum('transaction__balance'))
     return render(request, 'pos_system/customer_debt_report.html', {
