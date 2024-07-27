@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-
+from .views import daily_sales_report, print_daily_sales_report
 app_name = 'pos_system'
 
 urlpatterns = [
