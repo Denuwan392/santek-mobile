@@ -18,7 +18,7 @@
             {{ form.end_date.label_tag }}
             {{ form.end_date }}
         </div>
-        <div class="mr-2"></div> <!-- Add a blank div with margin -->
+        <div class="mr-2"></div>
         <button type="submit" class="btn btn-primary">Filter</button>
     </form>
     
@@ -31,16 +31,18 @@
                     <th>Customer</th>
                     <th>Date</th>
                     <th>Total Amount</th>
+                    <th>Profit</th>
                 </tr>
             </thead>
             <tbody>
-                {% for transaction in sales %}
+                {% for tx in transactions_with_profit %}
                 <tr>
-                    <td>{{ transaction.id }}</td>
-                    <td>{{ transaction.invoice_number }}</td>
-                    <td>{{ transaction.customer.name }}</td>
-                    <td>{{ transaction.transaction_date }}</td>
-                    <td>Rs. {{ transaction.total_amount }}</td>
+                    <td>{{ tx.transaction.id }}</td>
+                    <td>{{ tx.transaction.invoice_number }}</td>
+                    <td>{{ tx.transaction.customer.name }}</td>
+                    <td>{{ tx.transaction.transaction_date }}</td>
+                    <td>Rs. {{ tx.transaction.total_amount }}</td>
+                    <td>Rs. {{ tx.profit }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -48,7 +50,16 @@
     </div>
 
     <h3>Total Sales: Rs. {{ total_sales }}</h3>
+    <h3>Total Profit: Rs. {{ total_profit }}</h3>
 
-    <button onclick="window.print()" class="btn btn-secondary">Print Report</button>
+    {% if form.start_date.value and form.end_date.value %}
+    <a href="{% url 'pos_system:print_daily_sales_report' form.start_date.value form.end_date.value %}" class="btn btn-primary">Print</a>
+
+    {% else %}
+        <span class="text-muted">Please select a date range to print.</span>
+    {% endif %}
+
 </div>
+
+
 {% endblock %}
